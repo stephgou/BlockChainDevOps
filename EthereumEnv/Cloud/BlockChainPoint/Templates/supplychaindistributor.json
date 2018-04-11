@@ -1,0 +1,536 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceNamePrefix": {
+      "type": "string",
+      "defaultValue": "Hackademy",
+      "maxLength": 11,
+      "metadata": {
+        "description": "Name prefix for the resources"
+      }
+    },
+    "vmDnsPrefix": {
+      "type": "string",
+      "defaultValue": "hackminingnode",
+      "metadata": {
+        "description": "This is the unique DNS name of the for the public IP for your VM"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_F2",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_F1",
+        "Standard_F2",
+        "Standard_F3",
+        "Standard_F4"
+      ],
+      "metadata": {
+        "description": "Size of VM"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "hackademy",
+      "metadata": {
+        "description": "This is the the username you wish to assign to your VMs admin account"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "defaultValue": "HackMe007",
+      "metadata": {
+        "description": "This is the the password you wish to assign to your VMs admin account"
+      }
+    },
+    "sshKeyData": {
+      "type": "string",
+      "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDhdhD4JCfI50HPBrgg+mQyhhid9CvN3oqpSBiCMp9FsCkAeVwsROXxvgz4UTdStcWd3p/Qa/vkMy6hQvAPdMs+LS8ltsbt6qIgUTxRbNxi+y2heL5a6VqHVPpcqDOncT3NsyqqNXdEVjZGaSSkD5MDSGkxMuwFakG5XJ4PtKfWHAwBtQuesBIFM3wYGS6Ty5PfsFZqPkd96Nx/oPdCoLCjqzlTy1xi2Uhn8tv5nehWC7MXKzJbAxjfI15kIx7A9VfBL1qjQoZKKKBB2wbPMEMxbZGRxKVPgf807v6CyplpJ2DTPnZCQIxNqZF/APUUtdqGTWyJ+Wq3aisIjxnnZQKecu4YdbjNsIBlVkzaQCdPggxMn0d/MWcep4xKqp+xCrVrDrVzUmp2vrHzTMg1JOozRMB8vom05NczsNT8reB3IWe4S4iS527+zjwDM7TZWxrUb+xxEC0uKpQuJ+8va95VSIbhm7tJrdl4EjBiGuoK243/bgPVbkLxa1yHIq8OKgezGHdSb1KJzv2yFJZwQm/57gxfsSxsfqpVWoPlLmGLQFIT1NNUQtkuoJIxCLW/1OwAMkbclmDPXyaW5smAem9+MSM25wN8kU5OytzRcLyG58bdnZyuUuBbGeKDWZwhBuYJ3ib7vHFbetCEmAQhHDmFGnUQf0Kd+0R6BE5en8dswQ== stephgou@X1CARBONW10TP",
+      "metadata": {
+        "description": "Public key for SSH authentication"
+      }
+    },
+    "ethereumAccountAddress": {
+      "type": "string",
+      "defaultValue": "0xd5e6350e57c075cf756daa4bf16e6bd7190dd0b2",
+      "metadata": {
+        "description": "Ethereum prefunded account address"
+      }
+    },
+    "ethereumAccountPassword": {
+      "type": "securestring",
+      "defaultValue": "HackMe007",
+      "metadata": {
+        "description": "Administrator password used to secure the generated private key file associated with the created Ethereum account"
+      }
+    },
+    "ethereumAccountKey": {
+      "type": "securestring",
+      "defaultValue": "dec467a21e5a51a6c25f6ae9da9ddcd8d26a3bfe88d22f348c955689f9a4db28",
+      "metadata": {
+        "description": "Private key used to generate account prefunded with Ether. Use myetherwallet.com to generate a private key."
+      }
+    },
+    "ethereumNetworkID": {
+      "type": "int",
+      "defaultValue": 180666,
+      "metadata": {
+        "description": "Private Ethereum network ID to which to connect"
+      }
+    },
+    "ethereumMiningNodesNumber": {
+      "type": "int",
+      "defaultValue": 3,
+      "metadata": {
+        "description": "Number of mining nodes within the network"
+      },
+      "minValue": 1
+    },
+    "svcPlanSize": {
+      "type": "string",
+      "defaultValue": "S1",
+      "metadata": {
+        "description": "The instance size of the App Service Plan."
+      }
+    },
+    "svcPlanSku": {
+      "type": "string",
+      "allowedValues": [
+        "Free",
+        "Shared",
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+        "description": "The pricing tier of the App Service plan."
+      }
+    }
+  },
+  "variables": {
+    "imageReference": {
+      "offer": "UbuntuServer",
+      "publisher": "Canonical",
+      "sku": "14.04.2-LTS",
+      "version": "latest"
+    },
+    "availabilitySetName": "[concat(parameters('resourceNamePrefix'),'-AVSet')]",
+    "availabilitySetId": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]",
+    "faultDomainCount": "3",
+    "updateDomainCount": "10",
+    "storageAccountName": "[replace(replace(tolower(concat(parameters('resourceNamePrefix'), uniquestring(resourceGroup().id))), '-',''),'.','')]",
+    "storageAccountType": "Standard_LRS",
+    "vnetName": "[concat(parameters('resourceNamePrefix'),'-VNet')]",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetName'))]",
+    "vnetAddressPrefix": "10.0.0.0/16",
+    "subnetName": "[concat(parameters('resourceNamePrefix'),'SubNet')]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "subnetAddressPrefix": "10.0.0.0/24",
+    "subnetRoot": "[concat( split(variables('subnetAddressPrefix'), '.')[0], '.', split(variables('subnetAddressPrefix'), '.')[1], '.', split(variables('subnetAddressPrefix'), '.')[2])]",
+    "pIPLoadBalancerAddressName": "[concat(parameters('resourceNamePrefix'),'-PIP-LB')]",
+    "pIPEthereumNodeAddressNamePrefix": "[concat(parameters('resourceNamePrefix'),'-PIP-')]",
+    "pIPAddressType": "Dynamic",
+    "loadBalancerName": "[concat(parameters('resourceNamePrefix'),'-LB')]",
+    "loadBalancerFrontEndIpConfigName": "[concat(parameters('resourceNamePrefix'),'-LB-FE')]",
+    "loadBalancerBackendAddressPoolName": "[concat(parameters('resourceNamePrefix'),'-LB-BE')]",
+    "loadBalancerID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
+    "loadBalancerFrontEndIpConfigID": "[concat(variables('loadBalancerID'),'/frontendIPConfigurations/',variables('loadBalancerFrontEndIpConfigName'))]",
+    "loadBalancerBackendAddressPoolID": "[concat(variables('loadBalancerID'), '/backendAddressPools/',variables('loadBalancerBackendAddressPoolName'))]",
+    "httpPort": 80,
+    "adminSitePort": 3000,
+    "sshPort": 22,
+    "gethRPCPort": 8545,
+    "gethIPCPort": 30303,
+    "NetworkSecurityGroupName": "[concat(parameters('resourceNamePrefix'),'-NSG')]",
+    "nicNamePrefix": "[concat(parameters('resourceNamePrefix'),'-Nic-')]",
+    "vmNamePrefix": "[concat(parameters('resourceNamePrefix'),'-Vm-')]",
+    "vmContainerName": "/vhds/",
+    "vmOsDiskName": "[concat(parameters('resourceNamePrefix'),'-os-')]",
+    "vmDataDiskName": "[concat(parameters('resourceNamePrefix'),'-data-')]",
+    "configExtensionScriptUrl": "https://raw.githubusercontent.com/DXFrance/BlockchainPoint/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
+    "configExtensionScriptCmd": "bash configure-geth.sh",
+    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+    "disablePasswordAuthentication": "true",
+    "svcPlanName": "[concat(parameters('resourceNamePrefix'),'-HostingPlan')]",
+    "webAppName": "[concat(parameters('resourceNamePrefix'),'-WebApp')]",
+    "ethereumNodeIdPrefix": "[concat(parameters('resourceNamePrefix'),'-EthereumNode-')]",
+    "webAppSourceControlRepositoryUrl": "https://github.com/DXFrance/BlockchainPoint.git",
+    "webAppSourceControlBranch": "master",
+    "apiVersion": "2015-06-15",
+    "webAppApiVersion": "2015-08-01",
+    "vmNames": [
+      "[concat(parameters('resourceNamePrefix'), '-Manufacturer')]",
+      "[concat(parameters('resourceNamePrefix'), '-Warehouse')]",
+      "[concat(parameters('resourceNamePrefix'), '-Distributor')]",
+      "[concat(parameters('resourceNamePrefix'), '-RetailStore')]"
+    ]
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('availabilitySetName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Ethereum Nodes Availability Set"
+      },
+      "properties": {
+        "PlatformFaultDomainCount": "[variables('faultDomainCount')]",
+        "PlatformUpdateDomainCount": "[variables('updateDomainCount')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Ethereum Nodes Storage Account"
+      },
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(variables('pIPEthereumNodeAddressNamePrefix'), copyindex())]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Ethereum Nodes Public IPs"
+      },
+      "copy": {
+        "name": "PublicIPAddressesCopy",
+        "count": "[parameters('ethereumMiningNodesNumber')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "[variables('pIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[concat(parameters('vmDnsPrefix'), copyindex())]"
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('pIPLoadBalancerAddressName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Load Balancer public IP"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('vmDnsPrefix')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "[variables('loadBalancerName')]",
+      "type": "Microsoft.Network/loadBalancers",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Ethereum Nodes Load Balancer"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('pIPLoadBalancerAddressName'))]"
+      ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "[variables('loadbalancerFrontEndIpConfigName')]",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses/', variables('pIPLoadBalancerAddressName'))]"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "[variables('loadBalancerBackendAddressPoolName')]"
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "name": "HTTP-LB-Rule",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('loadBalancerFrontEndIPConfigID')]"
+              },
+              "backendAddressPool": {
+                "id": "[variables('loadBalancerBackendAddressPoolID')]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": "[variables('httpPort')]",
+              "backendPort": "[variables('adminSitePort')]",
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 5,
+              "probe": {
+                "id": "[concat(variables('loadBalancerID'),'/probes/lbProbe')]"
+              }
+            }
+          },
+          {
+            "name": "GethRPC-LB-Rule",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('loadBalancerFrontEndIPConfigID')]"
+              },
+              "backendAddressPool": {
+                "id": "[variables('loadBalancerBackendAddressPoolID')]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": "[variables('gethRPCPort')]",
+              "backendPort": "[variables('gethRPCPort')]",
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 5
+            }
+          }
+        ],
+        "probes": [
+          {
+            "name": "lbProbe",
+            "properties": {
+              "protocol": "Tcp",
+              "port": "[variables('adminSitePort')]",
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('NetworkSecurityGroupName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Network Security Group"
+      },
+      "properties": {
+        "securityRules": [
+          {
+            "name": "allow-ssh",
+            "properties": {
+              "description": "Allow SSH",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "allow-geth-rpc",
+            "properties": {
+              "description": "Allow geth RPC",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8545",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "allow-etheradmin",
+            "properties": {
+              "description": "Allow etheradmin web service",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3000",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 102,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[variables('vnetName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Virtual Network"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('NetworkSecurityGroupName'))]"
+      ],
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('vnetAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('subnetAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NetworkSecurityGroupName'))]"
+              }
+
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('nicNamePrefix'), copyindex())]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Ethereum Nodes Network cards"
+      },
+      "copy": {
+        "name": "NetworkInterfacesCopy",
+        "count": "[parameters('ethereumMiningNodesNumber')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('pIPEthereumNodeAddressNamePrefix'), copyindex())]",
+        "[concat('Microsoft.Network/virtualNetworks/', variables('vnetName'))]",
+        "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('nicNamePrefix'), 'Config', copyindex())]",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(variables('subnetRoot'), '.',add(copyindex(),4) )]",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('pIPEthereumNodeAddressNamePrefix'), copyindex()))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[variables('loadBalancerBackendAddressPoolID')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('vmNames')[2]]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "[variables('vmNames')[2]]"
+      },
+
+      "dependsOn": [
+        "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicNamePrefix'), '2')]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[variables('availabilitySetId')]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmNames')[2]]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": "[variables('disablePasswordAuthentication')]",
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[variables('sshKeyPath')]",
+                  "keyData": "[parameters('sshKeyData')]"
+                }
+              ]
+            }
+          }
+        },
+        "storageProfile": {
+          "imageReference": "[variables('imageReference')]",
+          "osDisk": {
+            "name": "[concat(variables('vmOsDiskName'), '2')]",
+            "vhd": {
+              "uri": "[concat('http://', variables('storageAccountName'),'.blob.core.windows.net', variables('vmContainerName'), variables('vmOsDiskName'), '2.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "[concat(variables('vmDataDiskName'), '2')]",
+              "diskSizeGB": "1000",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', variables('storageAccountName'),'.blob.core.windows.net', variables('vmContainerName'), variables('vmDataDiskName'), '2.vhd')]"
+              },
+              "createOption": "Empty"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicNamePrefix'), '2'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmNames')[2],'/configExtension')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Ethereum Config Extension 2"
+      },
+      "apiVersion": "[variables('apiVersion')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('vmNames')[2])]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('configExtensionScriptUrl')]"
+          ],
+          "commandToExecute": "[concat(variables('configExtensionScriptCmd'),' \"', parameters('adminUsername'), '\" \"', parameters('ethereumAccountPassword'),'\" \"', parameters('ethereumAccountKey'),'\" \"', parameters('ethereumNetworkID'), '\" \"', parameters('ethereumAccountAddress'), '\" \"', parameters('ethereumMiningNodesNumber'), '\" \"', variables('ethereumNodeIdPrefix'), '2', '\" \"','2', '\" \"', concat(variables('subnetRoot'),'.6'),'\"')]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "result": {
+      "value": "BlockChainPoint Provisioning achieved",
+      "type": "string"
+    }
+  }
+}

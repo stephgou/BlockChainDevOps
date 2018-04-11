@@ -1,0 +1,58 @@
+﻿[
+  {
+    "name": "Hackademy-1",
+    "cwd": ".",
+    "script": "app.js",
+    "log_date_format": "YYYY-MM-DD HH:mm Z",
+    "merge_logs": false,
+    "watch": false,
+    "exec_interpreter": "node",
+    "exec_mode": "fork_mode",
+    "env": {
+      "NODE_ENV": "production",
+      "RPC_HOST": "10.0.0.6",
+      "RPC_PORT": "8545",
+      "INSTANCE_NAME": "Hackademy-1",
+      "WS_SERVER": "http://localhost:3000",
+      "WS_SECRET": "eth-net-stats-has-a-secret"
+    }
+  },
+  {
+    "name"        : "Hackademy-2",
+    "cwd"         : ".",
+    "script"      : "app.js",
+    "log_date_format"   : "YYYY-MM-DD HH:mm Z",
+    "merge_logs"    : false,
+    "watch"       : false,
+    "exec_interpreter"  : "node",
+    "exec_mode"     : "fork_mode",
+    "env":
+    {
+      "NODE_ENV"    : "production",
+      "RPC_HOST"    : "10.0.0.5",
+      "RPC_PORT"    : "8545",
+      "INSTANCE_NAME"   : "Hackademy-2",
+      "WS_SERVER"     : "http://localhost:3000",
+      "WS_SECRET"     : "eth-net-stats-has-a-secret",
+    }
+  },
+  {
+    "name"        : "Hackademy-3",
+    "cwd"         : ".",
+    "script"      : "app.js",
+    "log_date_format"   : "YYYY-MM-DD HH:mm Z",
+    "merge_logs"    : false,
+    "watch"       : false,
+    "exec_interpreter"  : "node",
+    "exec_mode"     : "fork_mode",
+    "env":
+    {
+      "NODE_ENV"    : "production",
+      "RPC_HOST"    : "10.0.0.7",
+      "RPC_PORT"    : "8545",
+      "INSTANCE_NAME"   : "Hackademy-3",
+      "WS_SERVER"     : "http://localhost:3000",
+      "WS_SECRET"     : "eth-net-stats-has-a-secret",
+    }
+  },
+]

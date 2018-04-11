@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="bower_components/animate.css/animate.css">
+  <!-- <link rel="stylesheet" href="http://bootswatch.com/cosmo/bootstrap.css"> -->
+  <!-- https://raw.githubusercontent.com/thomaspark/bootswatch/master/dist/cosmo/bootstrap.css-->
+  <link rel="stylesheet" href="bower_components/bootswatch/cosmo/bootstrap.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="container-full">
+    <h1 class="title-title">Ancrez votre passage dans une blockchain ! </h1>
+    <div class="row head">
+      <div class="col-md-4 head-logo">
+        <img class="img" src="https://www.microsoft.com/france/images/worker/newsletter/fy17/msdn/experiences/white.png" alt="Logo">
+        <img src="img/logo.png" alt="Logo">
+      </div>
+      <div class="col-md-4 head-checkpoint head-list">
+        <div>
+          <span class="puce"></span>
+          <i class="fa fa-flag"></i>
+          <span class="title-1">Checkpoint</span>
+          <span class="title-2">Bienvenue,</span>
+          <span class="title-3 machine-id"></span>
+        </div>
+      </div>
+      <div class="col-md-4 head-certification head-list">
+        <div>
+          <span class="puce"></span>
+          <i class="fa fa-graduation-cap"></i>
+          <span class="title-1">Certification</span>
+          <span class="title-2">Félicitations</span>
+          <span class="title-3 certified"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row content">
+      <div class="col-md-4 content-qr">
+        <p>Scan your QR Code</p>
+        <div class="chevron"><i class="fa fa-chevron-down"></i></div>
+        <div class="video-handler">
+          <div class="focus"></div>
+          <div id="loader-video">
+            <div>
+              <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+            </div>
+          </div>
+          <video autoplay></video>
+        </div>
+        <p>Or click on this Button </p>
+        <div id="over">
+            <img src="img/ms.jpg" alt="Logo" width="90" style="margin-left:-30px" class="Centered" onclick="debugBlockchain()">
+        </div>
+      </div>
+      <div class="col-md-4 content-checkpoint content-list">
+        <ul>
+
+        </ul>
+      </div>
+      <div class="col-md-4 content-certification content-list">
+        <ul>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="loader">
+    Bienvenue dans la Blockchain <span></span> ! :)
+  </div>
+  <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"><i class="fa fa-twitter"></i> <span></span> Certification - Twitter</h4>
+        </div>
+        <div class="modal-body">
+          <iframe border=0 frameborder=0 height=250 width="100%"></iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="https://hackademy-webapi.azurewebsites.net/socket.io/socket.io.js"></script>
+  <!--<script type="text/javascript" src="http://localhost:1996/socket.io/socket.io.js"></script>-->
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/mustache.js/mustache.js"></script>
+  <script type="text/javascript" src="js/qcode-decoder.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+</body>
+</html>

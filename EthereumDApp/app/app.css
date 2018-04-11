@@ -1,0 +1,303 @@
+* {
+  font-family: 'Segoe UI';
+}
+
+body {
+  background-color: #19191a;
+  margin: 0;
+  overflow: hidden;
+}
+
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+  padding: 15px 10px;
+}
+
+.head {
+  min-height: 100px;
+  border-bottom: 1px solid #c9c8cd;
+}
+
+.head-logo .img {
+  width: 50%;
+  margin-top: 60px;
+}
+
+.head-logo img {
+  position: relative;
+  width: 100%;
+}
+
+.head-list div {
+  height: 70px;
+  border-left: 1px solid #c9c8cd;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  padding-left: 18px;
+}
+
+.head-list i {
+  color: white;
+  font-size: 18px;
+  position: absolute;
+  left: -9px;
+  top: -34px;
+}
+
+.head-list .puce {
+  position: absolute;
+  left: -5px;
+  top: -10px;
+}
+
+.head-list {
+  height: 155px;
+}
+
+.title-1 {
+  color: white;
+  display: block;
+  font-weight: 500;
+}
+
+.title-2 {
+  color: #0193c9;
+  font-weight: 500;
+  font-size: 28px;
+  position: relative;
+  bottom: 4px;
+}
+
+.title-3 {
+  color: #c9c8cd;
+  font-size: 85px;
+  position: absolute;
+  right: 30px;
+  bottom: -10px;
+  font-weight: 100;
+}
+
+.head-certification .title-3 {
+  padding-right: 10px;
+}
+
+.puce {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid #c9c8cd;
+  background: #19191a;
+}
+
+.content-qr p {
+  color: #c9c8cd;
+  text-align: center;
+  padding-top: 50px;
+  font-size: 15px;
+}
+
+.content-qr div.chevron {
+  text-align: center;
+}
+
+.content-qr .video-handler {
+  width: 80%;
+  margin: auto;
+  position: relative;
+}
+
+.content-qr div i.fa-chevron-down {
+  color: #0193c9;
+  font-size: 35px;
+  position: relative;
+  bottom: 10px;
+}
+
+.title-title {
+  color: white;
+  text-align: center;
+  margin: 0px;
+}
+
+.content-qr video {
+  border-radius: 50%;
+  width: 100%;
+  margin: auto;
+  border: 5px solid #0193c9;
+  position: relative;
+  top: 0px;
+  object-fit: inherit;
+  transform: rotateY(180deg);
+-webkit-transform:rotateY(180deg); /* Safari and Chrome */
+-moz-transform:rotateY(180deg); /* Firefox */
+}
+
+.content-qr #loader-video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 5;
+  border-radius: 50%;
+  display: none;
+}
+
+.content-qr #loader-video div {
+  font-size: 35px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-block;
+  color: #0193c9;
+  text-align: center;
+  width: 100%;
+}
+
+#loader {
+  width: 100%;
+  position: absolute;
+  height: 200px;
+  background: #0193c9;
+  bottom: -200px;
+  color: white;
+  z-index: 555;
+  text-align: center;
+  line-height: 200px;
+  font-size: 45px;
+  transition: all linear 0.3s;
+}
+
+.content-list ul {
+  padding: 0;
+  margin: 0px;
+  list-style-type: none;
+  width: calc(100% + 31px);
+  position: relative;
+}
+
+.content-list ul li {
+  height: 90px;
+  width: 100%;
+  border-left: 1px solid #c9c8cd;
+  border-right: 1px solid #c9c8cd;
+  border-bottom: 1px solid #c9c8cd;
+  position: relative;
+  padding-left: 85px;
+  transition: 0.2s linear all;
+}
+
+.content-list ul li .date {
+  color: #c9c8cd;
+  position: absolute;
+  left: -54px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  transition: 0.2s linear all;
+}
+
+.content-list ul li .puce {
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: 0.2s linear all;
+}
+
+.content-list ul li .name {
+  display: block;
+  color: #c9c8cd;
+  font-weight: 500;
+  font-size: 23px;
+  position: relative;
+  top: 15px;
+  transition: 0.2s linear all;
+}
+
+.content-list ul li .status {
+  color: #c9c8cd;
+  position: relative;
+  top: 15px;
+  transition: 0.2s linear all;
+}
+
+.content-list ul li i.icone {
+  color: #c9c8cd;
+  font-size: 32px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 30px;
+  transition: 0.2s linear all;
+}
+
+.content-list ul li:hover, .content-list ul li:hover .puce {
+  border-color: #0193c9;
+}
+
+.content-list ul li:hover .date, .content-list ul li:hover .status, .content-list ul li:hover i, .content-certification ul li:hover .link, .content-certification ul li:hover .fa-twitter {
+  color: #0193c9;
+}
+
+.content-list ul li:hover .name {
+  color: white;
+}
+
+.content-certification ul li .link {
+  float: right;
+  padding-right: 45px;
+  z-index: 5;
+  position: relative;
+}
+
+.content-certification ul li .fa-twitter {
+  color: #c9c8cd;
+  font-size: 28px;
+  position: relative;
+  margin-left: 5px;
+  top: 0px;
+  cursor: pointer;
+}
+
+.content-certification ul li a {
+  display: block;
+  color: #0193c9;
+}
+
+.content-certification ul li a:hover {
+  text-decoration: none;
+}
+
+.modal-content  {
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
+
+.focus {
+  width: 50%;
+ height: 65%;
+ position: absolute;
+ border: 3px solid #0193C9;
+ z-index: 5;
+ top: 50%;
+ transform: translateX(-50%) translateY(-50%);
+ left: 50%;
+}
+
+#over
+{
+    position:absolute;
+    width:100%;
+    height:100%;
+    text-align: center; /*handles the horizontal centering*/
+}
+/*handles the vertical centering*/
+.Centered
+{
+    display: inline-block;
+    vertical-align: middle;
+}

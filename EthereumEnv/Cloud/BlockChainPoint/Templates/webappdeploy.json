@@ -1,0 +1,316 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceNamePrefix": {
+      "type": "string",
+      "defaultValue": "Hackademy",
+      "maxLength": 11,
+      "metadata": {
+        "description": "Name prefix for the resources"
+      }
+    },
+    "vmDnsPrefix": {
+      "type": "string",
+      "defaultValue": "hackminingnode",
+      "metadata": {
+        "description": "This is the unique DNS name of the for the public IP for your VM"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_F2",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_F1",
+        "Standard_F2",
+        "Standard_F3",
+        "Standard_F4"
+      ],
+      "metadata": {
+        "description": "Size of VM"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "hackademy",
+      "metadata": {
+        "description": "This is the the username you wish to assign to your VMs admin account"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "defaultValue": "HackMe007",
+      "metadata": {
+        "description": "This is the the password you wish to assign to your VMs admin account"
+      }
+    },
+    "sshKeyData": {
+      "type": "string",
+      "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDhdhD4JCfI50HPBrgg+mQyhhid9CvN3oqpSBiCMp9FsCkAeVwsROXxvgz4UTdStcWd3p/Qa/vkMy6hQvAPdMs+LS8ltsbt6qIgUTxRbNxi+y2heL5a6VqHVPpcqDOncT3NsyqqNXdEVjZGaSSkD5MDSGkxMuwFakG5XJ4PtKfWHAwBtQuesBIFM3wYGS6Ty5PfsFZqPkd96Nx/oPdCoLCjqzlTy1xi2Uhn8tv5nehWC7MXKzJbAxjfI15kIx7A9VfBL1qjQoZKKKBB2wbPMEMxbZGRxKVPgf807v6CyplpJ2DTPnZCQIxNqZF/APUUtdqGTWyJ+Wq3aisIjxnnZQKecu4YdbjNsIBlVkzaQCdPggxMn0d/MWcep4xKqp+xCrVrDrVzUmp2vrHzTMg1JOozRMB8vom05NczsNT8reB3IWe4S4iS527+zjwDM7TZWxrUb+xxEC0uKpQuJ+8va95VSIbhm7tJrdl4EjBiGuoK243/bgPVbkLxa1yHIq8OKgezGHdSb1KJzv2yFJZwQm/57gxfsSxsfqpVWoPlLmGLQFIT1NNUQtkuoJIxCLW/1OwAMkbclmDPXyaW5smAem9+MSM25wN8kU5OytzRcLyG58bdnZyuUuBbGeKDWZwhBuYJ3ib7vHFbetCEmAQhHDmFGnUQf0Kd+0R6BE5en8dswQ== stephgou@X1CARBONW10TP",
+      "metadata": {
+        "description": "Public key for SSH authentication"
+      }
+    },
+    "ethereumAccountAddress": {
+      "type": "string",
+      "defaultValue": "0xd5e6350e57c075cf756daa4bf16e6bd7190dd0b2",
+      "metadata": {
+        "description": "Ethereum prefunded account address"
+      }
+    },
+    "ethereumAccountPassword": {
+      "type": "securestring",
+      "defaultValue": "HackMe007",
+      "metadata": {
+        "description": "Administrator password used to secure the generated private key file associated with the created Ethereum account"
+      }
+    },
+    "ethereumAccountKey": {
+      "type": "securestring",
+      "defaultValue": "dec467a21e5a51a6c25f6ae9da9ddcd8d26a3bfe88d22f348c955689f9a4db28",
+      "metadata": {
+        "description": "Private key used to generate account prefunded with Ether. Use myetherwallet.com to generate a private key."
+      }
+    },
+    "ethereumNetworkID": {
+      "type": "int",
+      "defaultValue": 180666,
+      "metadata": {
+        "description": "Private Ethereum network ID to which to connect"
+      }
+    },
+    "ethereumMiningNodesNumber": {
+      "type": "int",
+      "defaultValue": 3,
+      "metadata": {
+        "description": "Number of mining nodes within the network"
+      },
+      "minValue": 1
+    },
+    "svcPlanSize": {
+      "type": "string",
+      "defaultValue": "S1",
+      "metadata": {
+        "description": "The instance size of the App Service Plan."
+      }
+    },
+    "svcPlanSku": {
+      "type": "string",
+      "allowedValues": [
+        "Free",
+        "Shared",
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+        "description": "The pricing tier of the App Service plan."
+      }
+    }
+  },
+  "variables": {
+    "imageReference": {
+      "publisher": "Canonical",
+      "offer": "UbuntuServer",
+      "sku": "14.04.2-LTS",
+      "version": "latest"
+    },
+    "availabilitySetName": "[concat(parameters('resourceNamePrefix'),'-AVSet')]",
+    "availabilitySetId": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]",
+    "faultDomainCount": "3",
+    "updateDomainCount": "10",
+    "storageAccountName": "[replace(replace(tolower(concat(parameters('resourceNamePrefix'), uniquestring(resourceGroup().id))), '-',''),'.','')]",
+    "storageAccountType": "Standard_LRS",
+    "vnetName": "[concat(parameters('resourceNamePrefix'),'-VNet')]",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetName'))]",
+    "vnetAddressPrefix": "10.0.0.0/16",
+    "subnetName": "[concat(parameters('resourceNamePrefix'),'SubNet')]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "subnetAddressPrefix": "10.0.0.0/24",
+    "pIPLoadBalancerAddressName": "[concat(parameters('resourceNamePrefix'),'-PIP-LB')]",
+    "pIPEthereumNodeAddressNamePrefix": "[concat(parameters('resourceNamePrefix'),'-PIP-')]",
+    "pIPAddressType": "Dynamic",
+    "loadBalancerName": "[concat(parameters('resourceNamePrefix'),'-LB')]",
+    "loadBalancerFrontEndIpConfigName": "[concat(parameters('resourceNamePrefix'),'-LB-FE')]",
+    "loadBalancerBackendAddressPoolName": "[concat(parameters('resourceNamePrefix'),'-LB-BE')]",
+    "loadBalancerID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
+    "loadBalancerFrontEndIpConfigID": "[concat(variables('loadBalancerID'),'/frontendIPConfigurations/',variables('loadBalancerFrontEndIpConfigName'))]",
+    "loadBalancerBackendAddressPoolID": "[concat(variables('loadBalancerID'), '/backendAddressPools/',variables('loadBalancerBackendAddressPoolName'))]",
+    "httpPort": 80,
+    "adminSitePort": 3000,
+    "sshPort": 22,
+    "gethRPCPort": 8545,
+    "gethIPCPort": 30303,
+    "NetworkSecurityGroupName": "[concat(parameters('resourceNamePrefix'),'-NSG')]",
+    "nicNamePrefix": "[concat(parameters('resourceNamePrefix'),'-Nic-')]",
+    "vmNamePrefix": "[concat(parameters('resourceNamePrefix'),'-Vm-')]",
+    "vmContainerName": "/vhds/",
+    "vmOsDiskName": "[concat(parameters('resourceNamePrefix'),'-os-')]",
+    "vmDataDiskName": "[concat(parameters('resourceNamePrefix'),'-data-')]",
+    "configExtensionScriptUrl": "https://raw.githubusercontent.com/DXFrance/BlockchainPoint/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
+    "configExtensionScriptCmd": "sh configure-geth.sh",
+    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+    "disablePasswordAuthentication": "true",
+    "svcPlanName": "[concat(parameters('resourceNamePrefix'),'-HostingPlan')]",
+    "webAppName": "[concat(parameters('resourceNamePrefix'),'-WebApp')]",
+    "webApiName": "[concat(parameters('resourceNamePrefix'),'-WebApi')]",
+    "webAppSourceControlRepositoryUrl": "https://github.com/DXFrance/BlockchainPoint.git",
+    "webAppSourceControlBranch": "master",
+    "apiVersion": "2015-06-15",
+    "webAppApiVersion": "2015-08-01"
+  },
+  "resources": [
+    {
+      "name": "[variables('svcPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('webAppApiVersion')]",
+      "tags": {
+        "displayName": "Blockchain App Service Plan"
+      },
+      "sku": {
+        "name": "[parameters('svcPlanSize')]",
+        "tier": "[parameters('svcPlanSku')]",
+        "capacity": 1
+      }
+    },
+    {
+      "name": "[variables('webAppName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('webAppApiVersion')]",
+      "tags": {
+        "displayName": "Blockchain Web App"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('svcPlanName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('svcPlanName'))]"
+      },
+      "resources": [
+        {
+          "name": "web",
+          "type": "config",
+          "apiVersion": "[variables('webAppApiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webAppName'))]"
+          ],
+          "properties": {
+            "phpVersion": "5.5",
+            "netFrameworkVersion": "v4.0",
+            "use32BitWorkerProcess": false, /* 64-bit platform */
+            "webSocketsEnabled": true,
+            "alwaysOn": true,
+            "requestTracingEnabled": true, /* Failed request tracing, aka 'freb' */
+            "httpLoggingEnabled": true, /* IIS logs (aka Web server logging) */
+            "logsDirectorySizeLimit": 40, /* 40 MB limit for IIS logs */
+            "detailedErrorLoggingEnabled": true, /* Detailed error messages  */
+            "remoteDebuggingEnabled": true,
+            "remoteDebuggingVersion": "VS2013"
+          }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webAppApiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webAppName'))]"
+          ],
+          "properties": {
+            "WEBSITE_NODE_DEFAULT_VERSION": "5.4.0",
+            "PROJECT": "EthereumDApp/build"
+          }
+        },
+        {
+          "name": "web",
+          "type": "sourcecontrols",
+          "apiVersion": "[variables('webAppApiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webAppName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[variables('webAppSourceControlRepositoryUrl')]",
+            "branch": "[variables('webAppSourceControlBranch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('webApiName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('webAppApiVersion')]",
+      "tags": {
+        "displayName": "Blockchain Web Api"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('svcPlanName'))]",
+        "[resourceId('Microsoft.Web/Sites', variables('webAppName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('svcPlanName'))]"
+      },
+      "resources": [
+        {
+          "name": "web",
+          "type": "config",
+          "apiVersion": "[variables('webAppApiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+          ],
+          "properties": {
+            "phpVersion": "5.5",
+            "netFrameworkVersion": "v4.0",
+            "use32BitWorkerProcess": false, /* 64-bit platform */
+            "webSocketsEnabled": true,
+            "alwaysOn": true,
+            "requestTracingEnabled": true, /* Failed request tracing, aka 'freb' */
+            "httpLoggingEnabled": true, /* IIS logs (aka Web server logging) */
+            "logsDirectorySizeLimit": 40, /* 40 MB limit for IIS logs */
+            "detailedErrorLoggingEnabled": true, /* Detailed error messages  */
+            "remoteDebuggingEnabled": true,
+            "remoteDebuggingVersion": "VS2013"
+          }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webAppApiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+          ],
+          "properties": {
+            "WEBSITE_NODE_DEFAULT_VERSION": "5.4.0",
+            "PROJECT": "EthereumDApi"
+          }
+        },
+        {
+          "name": "web",
+          "type": "sourcecontrols",
+          "apiVersion": "[variables('webAppApiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[variables('webAppSourceControlRepositoryUrl')]",
+            "branch": "[variables('webAppSourceControlBranch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "result": {
+      "value": "BlockChainPoint Provisioning achieved",
+      "type": "string"
+    }
+  }
+}

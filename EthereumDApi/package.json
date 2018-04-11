@@ -1,0 +1,30 @@
+{
+  "name": "bcapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "btoa": "^1.1.2",
+    "cors": "^2.8.1",
+    "ejs": "^2.4.2",
+    "express": "^4.13.4",
+    "html-pdf": "^2.1.0",
+    "mongoose": "^4.4.19",
+    "sha256": "^0.2.0",
+    "simple-oauth2": "^1.0.0",
+    "socket.io": "^1.4.8",
+    "sync": "^0.2.5",
+    "sync-request": "^3.0.1",
+    "twitter": "^1.4.0",
+    "twitter-stream-channels": "^1.0.0",
+    "web3": "^0.17.0-beta",
+    "xlsx-to-json": "^0.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

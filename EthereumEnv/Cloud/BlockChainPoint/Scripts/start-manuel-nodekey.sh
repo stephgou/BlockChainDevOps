@@ -1,0 +1,3 @@
+geth --maxpeers 3 --rpc --rpcaddr 0.0.0.0 --rpcport 8545 --rpccorsdomain * --rpcvhosts "*" --ipcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3 --rpcapi db,eth,net,web3 --networkid 180666 --unlock 0xd5e6350e57c075cf756daa4bf16e6bd7190dd0b2 --password /home/hackademy/ethereum-account-pwd-file --nodekey 2419ca02f3087c8765277200d229f9c3662a48b22f46a12e6611a680d5d97d38c5388855e458223085dc237a714e1ff538ef044e24478b53788a96d78633142b --nodiscover
+
+geth --maxpeers 3 --rpc --rpcaddr 0.0.0.0 --rpcport 8545 --rpccorsdomain * --rpcvhosts "*" --ipcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3 --rpcapi db,eth,net,web3 --networkid 180666 --unlock 0xd5e6350e57c075cf756daa4bf16e6bd7190dd0b2 --password /home/hackademy/ethereum-account-pwd-file --nodiscover

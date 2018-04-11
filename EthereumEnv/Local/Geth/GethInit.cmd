@@ -1,0 +1,2 @@
+geth --rpc --rpccorsdomain "*" --datadir "C:\temp\BlockchainPoint" --ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" --rpcapi "db,eth,net,web3" --networkid 180666 init genesis.json
+PAUSE
