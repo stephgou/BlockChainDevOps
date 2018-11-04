@@ -18,7 +18,13 @@ module.exports = {
     development: {
       host: "localhost",
       port: 8545,
-      network_id: "*",
+      network_id: "666",
+      from: ""
+    },
+    ganache: {
+      host: "localhost",
+      port: 7545,
+      network_id: "777",
       from: ""
     },
     consortium: {

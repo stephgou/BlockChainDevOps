@@ -1,4 +1,4 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.2;
 
 import "../contracts/Helpers.sol";
 
@@ -24,8 +24,15 @@ contract ChainPoint {
     address public creator;
     uint public usersnumber = 0;
   
+
+    // event stephgou(string orderno);
+
+    // function triggerStephgou(string orderno) public {
+    //     emit stephgou(orderno);
+    // }
+
     //ctor
-    function ChainPoint() public {
+    constructor() public {
         creator = msg.sender;
     }
 

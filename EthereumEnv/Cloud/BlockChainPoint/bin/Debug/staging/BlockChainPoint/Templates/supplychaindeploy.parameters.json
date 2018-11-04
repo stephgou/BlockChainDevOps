@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "resourceNamePrefix": {
-      "value": "Hackademy"
+      "value": "AdentsDemo"
     },
     "vmDnsPrefix": {
-      "value": "hackminingnode"
+      "value": "adentsdemo"
     },
     "vmSize": {
       "value": "Standard_F2"
@@ -33,7 +33,7 @@
       "value": 180666
     },
     "ethereumMiningNodesNumber": {
-      "value": 1
+      "value": 4
     },
     "svcPlanSku": {
       "value": "Standard"

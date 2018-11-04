@@ -115,8 +115,8 @@
   },
   "variables": {
     "imageReference": {
-      "publisher": "Canonical",
       "offer": "UbuntuServer",
+      "publisher": "Canonical",
       "sku": "14.04.2-LTS",
       "version": "latest"
     },
@@ -153,7 +153,7 @@
     "vmContainerName": "/vhds/",
     "vmOsDiskName": "[concat(parameters('resourceNamePrefix'),'-os-')]",
     "vmDataDiskName": "[concat(parameters('resourceNamePrefix'),'-data-')]",
-    "configExtensionScriptUrl": "https://raw.githubusercontent.com/DXFrance/BlockchainPoint/dev/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
+    "configExtensionScriptUrl": "https://raw.githubusercontent.com/DXFrance/BlockchainPoint/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
     "configExtensionScriptCmd": "bash configure-geth.sh",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "disablePasswordAuthentication": "true",
@@ -163,7 +163,13 @@
     "webAppSourceControlRepositoryUrl": "https://github.com/DXFrance/BlockchainPoint.git",
     "webAppSourceControlBranch": "master",
     "apiVersion": "2015-06-15",
-    "webAppApiVersion": "2015-08-01"
+    "webAppApiVersion": "2015-08-01",
+    "vmNames": [
+      "[concat(parameters('resourceNamePrefix'), '-Manufacturer')]",
+      "[concat(parameters('resourceNamePrefix'), '-Warehouse')]",
+      "[concat(parameters('resourceNamePrefix'), '-Distributor')]",
+      "[concat(parameters('resourceNamePrefix'), '-RetailStore')]"
+    ]
   },
   "resources": [
     {
@@ -431,19 +437,16 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(variables('vmNamePrefix'), copyindex())]",
+      "name": "[variables('vmNames')[2]]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "Ethereum Nodes Virtual machines"
+        "displayName": "[variables('vmNames')[2]]"
       },
-      "copy": {
-        "name": "VirtualMachinesCopy",
-        "count": "[parameters('ethereumMiningNodesNumber')]"
-      },
+
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', variables('nicNamePrefix'), copyindex())]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicNamePrefix'), '2')]"
       ],
       "properties": {
         "availabilitySet": {
@@ -453,7 +456,7 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('vmNamePrefix'), copyindex())]",
+          "computerName": "[variables('vmNames')[2]]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]",
           "linuxConfiguration": {
@@ -471,20 +474,20 @@
         "storageProfile": {
           "imageReference": "[variables('imageReference')]",
           "osDisk": {
-            "name": "[concat(variables('vmOsDiskName'), copyindex())]",
+            "name": "[concat(variables('vmOsDiskName'), '2')]",
             "vhd": {
-              "uri": "[concat('http://', variables('storageAccountName'),'.blob.core.windows.net', variables('vmContainerName'), variables('vmOsDiskName'), copyindex(),'.vhd')]"
+              "uri": "[concat('http://', variables('storageAccountName'),'.blob.core.windows.net', variables('vmContainerName'), variables('vmOsDiskName'), '2.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
           "dataDisks": [
             {
-              "name": "[concat(variables('vmDataDiskName'), copyindex())]",
+              "name": "[concat(variables('vmDataDiskName'), '2')]",
               "diskSizeGB": "1000",
               "lun": 0,
               "vhd": {
-                "uri": "[concat('http://', variables('storageAccountName'),'.blob.core.windows.net', variables('vmContainerName'), variables('vmDataDiskName'), copyIndex(), '.vhd')]"
+                "uri": "[concat('http://', variables('storageAccountName'),'.blob.core.windows.net', variables('vmContainerName'), variables('vmDataDiskName'), '2.vhd')]"
               },
               "createOption": "Empty"
             }
@@ -493,7 +496,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicNamePrefix'), copyindex()))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicNamePrefix'), '2'))]"
             }
           ]
         }
@@ -501,18 +504,14 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmNamePrefix'), copyindex(), '/configExtension')]",
+      "name": "[concat(variables('vmNames')[2],'/configExtension')]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "Ethereum Config Extension"
-      },
-      "copy": {
-        "name": "ExtensionCopy",
-        "count": "[parameters('ethereumMiningNodesNumber')]"
+        "displayName": "Ethereum Config Extension 2"
       },
       "apiVersion": "[variables('apiVersion')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('vmNamePrefix'), copyindex())]"
+        "[concat('Microsoft.Compute/virtualMachines/', variables('vmNames')[2])]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -523,7 +522,7 @@
           "fileUris": [
             "[variables('configExtensionScriptUrl')]"
           ],
-          "commandToExecute": "[concat(variables('configExtensionScriptCmd'),' \"', parameters('adminUsername'), '\" \"', parameters('ethereumAccountPassword'),'\" \"', parameters('ethereumAccountKey'),'\" \"', parameters('ethereumNetworkID'), '\" \"', parameters('ethereumAccountAddress'), '\" \"', parameters('ethereumMiningNodesNumber'), '\" \"', variables('ethereumNodeIdPrefix'), copyindex(), '\" \"', copyindex(), '\" \"', concat(variables('subnetRoot'),'.',add(copyindex(),4) ),'\"')]"
+          "commandToExecute": "[concat(variables('configExtensionScriptCmd'),' \"', parameters('adminUsername'), '\" \"', parameters('ethereumAccountPassword'),'\" \"', parameters('ethereumAccountKey'),'\" \"', parameters('ethereumNetworkID'), '\" \"', parameters('ethereumAccountAddress'), '\" \"', parameters('ethereumMiningNodesNumber'), '\" \"', variables('ethereumNodeIdPrefix'), '2', '\" \"','2', '\" \"', concat(variables('subnetRoot'),'.6'),'\"')]"
         }
       }
     }
