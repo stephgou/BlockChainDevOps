@@ -160,9 +160,9 @@ apt-get install solc -y  > /dev/null 2>&1
 
 
 # Fetch Genesis and Private Key
-wget https://github.com/stephgou/BlockchainDevOps/blob/master/EthereumEnv/Cloud/BlockChainPoint/Genesis/genesis.json
-wget https://github.com/stephgou/BlockchainDevOps/blob/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/start-private-blockchain.sh
-wget https://github.com/stephgou/BlockchainDevOps/blob/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-ethstats.sh
+wget https://raw.githubusercontent.com/stephgou/BlockchainDevOps/master/EthereumEnv/Cloud/BlockChainPoint/Genesis/genesis.json
+wget https://raw.githubusercontent.com/stephgou/BlockchainDevOps/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/start-private-blockchain.sh
+wget https://raw.githubusercontent.com/stephgou/BlockchainDevOps/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-ethstats.sh
 
 date
 
