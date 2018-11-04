@@ -153,7 +153,7 @@
     "vmContainerName": "/vhds/",
     "vmOsDiskName": "[concat(parameters('resourceNamePrefix'),'-os-')]",
     "vmDataDiskName": "[concat(parameters('resourceNamePrefix'),'-data-')]",
-    "configExtensionScriptUrl": "https://raw.githubusercontent.com/DXFrance/BlockchainPoint/dev/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
+    "configExtensionScriptUrl": "https://github.com/stephgou/BlockchainDevOps/blob/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
     "configExtensionScriptCmd": "bash configure-geth.sh",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "disablePasswordAuthentication": "true",
