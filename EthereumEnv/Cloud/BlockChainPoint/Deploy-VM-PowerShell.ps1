@@ -3,7 +3,7 @@
     $subscriptionName = "stephgou - Internal",
     $subscriptionId = "b1256985-d559-406d-a0ca-f47d72fed1e2",
     #Paramètres du Azure Ressource Group
-    $resourceGroupName = "BlockchainPoint",
+    $resourceGroupName = "SG-RG-BlockchainPoint",
     $resourceLocation = "North Europe",
 	$resourceGroupDeploymentName = "BlockchainPoint-Deployed",
     $templateFile = "azuredeploy.json",
@@ -26,7 +26,7 @@ Write-Host "scriptFolder" $scriptFolder
 set-location $scriptFolder
 #endregion init
 
-Login-AzureRmAccount -SubscriptionId $subscriptionId
+#Login-AzureRmAccount -SubscriptionId $subscriptionId
 
 # Resource group create
 New-AzureRmResourceGroup `

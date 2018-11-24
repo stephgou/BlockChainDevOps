@@ -1,0 +1,10 @@
+{
+  "name": "metacoinconsole",
+  "version": "0.0.0",
+  "description": "Metacoin Console",
+  "main": "cli2.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {}
+}

@@ -28,7 +28,11 @@
         "Standard_F1",
         "Standard_F2",
         "Standard_F3",
-        "Standard_F4"
+        "Standard_F4",
+        "Standard_F1s",
+        "Standard_F2s",
+        "Standard_F3s",
+        "Standard_F4s"
       ],
       "metadata": {
         "description": "Size of VM"

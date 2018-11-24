@@ -9,7 +9,7 @@
       "value": "hackminingnode"
     },
     "vmSize": {
-      "value": "Standard_F2"
+      "value": "Standard_F4s"
     },
     "adminUsername": {
       "value": "hackademy"

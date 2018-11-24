@@ -28,7 +28,11 @@
         "Standard_F1",
         "Standard_F2",
         "Standard_F3",
-        "Standard_F4"
+        "Standard_F4",
+        "Standard_F1s",
+        "Standard_F2s",
+        "Standard_F3s",
+        "Standard_F4s"
       ],
       "metadata": {
         "description": "Size of VM"
@@ -153,7 +157,7 @@
     "vmContainerName": "/vhds/",
     "vmOsDiskName": "[concat(parameters('resourceNamePrefix'),'-os-')]",
     "vmDataDiskName": "[concat(parameters('resourceNamePrefix'),'-data-')]",
-    "configExtensionScriptUrl": "https://github.com/stephgou/BlockchainDevOps/blob/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
+    "configExtensionScriptUrl": "https://raw.githubusercontent.com/stephgou/BlockchainDevOps/master/EthereumEnv/Cloud/BlockChainPoint/Scripts/configure-geth.sh",
     "configExtensionScriptCmd": "bash configure-geth.sh",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "disablePasswordAuthentication": "true",
