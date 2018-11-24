@@ -1,9 +1,6 @@
-
-var Web3 = require("web3");
-var provider = new Web3.providers.HttpProvider("http://localhost:7545");
-var Web3 = require("web3");
-var web3 = new Web3(provider);
-var account_one = web3.eth.accounts[0];
+'use strict';
+var blockchain_provider = null;
+var provider = null;
 var contract = null;
 
 if (localStorage.getItem("machine_id") === null) {
@@ -72,69 +69,50 @@ function resultHandler (err, result) {
 qr.decodeFromCamera(video, resultHandler);
 
 $(document).ready(function() {
-  
-  //var address = "0x770947bf54dad3de48ab62be1a05178c21afcd1c";
-  //var address = "0x5ba96d21c6b3e6ebaae1394c52fb361058c32913";
-  //contract = ChainPoint.at(address);
-  //console.log(ChainPoint.address);
-  //contract = ChainPoint.at(ChainPoint.address);
 
-  $.getJSON('contracts/ChainPoint.json', function (data) {
-    // Get the necessary contract artifact file and instantiate it with truffle-contract
-    var contractArtifact = data;
-    //var contractArtifact = $.getJSON('contracts/ChainPoint.json');   
-    
-    //console.log(contractArtifact);
-    console.log("contractArtifact");
-    var myContract = TruffleContract(contractArtifact);
-    console.log("mycontract");
-    myContract.setProvider(provider);
-    console.log("provider");
-    myContract.defaults({from: account_one});
+  $.getJSON('env.json', function (config) {
+    var network = config.network;
+    var host = network.host;
+    var port = network.port;
+    blockchain_provider = "http://" + host + ":" + port;
+    //console.log(blockchain_provider);
+    // Set the provider you want from Web3.providers
+    provider = new Web3.providers.HttpProvider(blockchain_provider);
+    //console.log(provider);
+    web3 = new Web3(provider);
+    account_one = web3.eth.accounts[0];
+    //console.log(account_one);
 
-    myContract.deployed().then(instance => {
+    $.getJSON('contracts/ChainPoint.json', function (data) {
+      // Get the necessary contract artifact file and instantiate it with truffle-contract
+      var contractArtifact = data;
+      var myContract = TruffleContract(contractArtifact);
+      myContract.setProvider(provider);
 
-      contract = instance;
-      console.log("contract");
-      console.log(contract);
+      myContract.defaults({from: account_one});
 
-        // var id = "0F623638-9B01-4ca6-A553-72709801DB1C";
-        // var username = "scott";
-        // var account_production = web3.eth.accounts[0];
-        // var step = 1;
-      
-        //var c = contract.check(id, username, step, {from: account_production, gas: 200000});
-        //console.log("Transaction successful! " + String.fromCharCode.apply(String, c));
-    
-      // contract.check(id, username, step, {from: account_production, gas: 200000}).then(function(calltx) {
-      //       // This code block will not be executed until truffle-contract has verified
-      //       // the transaction has been processed and it is included in a mined block.
-      //       // truffle-contract will error if the transaction hasn't been processed in 120 seconds.
-      //   console.log("Call Transaction successful! ");
-      //   var logs = contract.CheckPointAchieved({fromBlock: 'latest'});
-      //   logs.watch(function(error, result) {
-      //     console.log("CheckPoint!");
-      //     console.log(result.args.userid);
-      //     console.log(result.args.username);
-      //     console.log(result.args.step.toString());
-      //   });
-      // }).catch(function(e) {
-      //   // Transaction failed
-      //   console.log("Transaction failed:");
-      //   console.log("ERROR! " + e.message);
-      //   console.dir(e);
-      // });
+      myContract.deployed().then(instance => {
 
-      logs = contract.CheckPointAchieved({fromBlock: 'latest'});
-      logs.watch(function(error, result) {
-        console.log("CheckPoint!");
-        console.log(result.args.userid);
-        console.log(result.args.username);
-        console.log(result.args.step.toString());
-        DOM_pushCheckpointDone(result.args.username, result.args.step.toString());
-        // when the transaction mining occurs it's not necessary to broadcast the info to the EthereumDApp
-        // because they should already be notified through the ethereum protocol
-        //socket.emit('checkpoint_mined', {username: result.args.username, step: result.args.step.toString()});
+        contract = instance;
+        //console.log(contract);
+
+        var startWatch = false;
+        //logs = contract.CheckPointAchieved({_from:web3.eth.coinbase},{fromBlock: 0, toBlock: 'latest'});
+        events = contract.CheckPointAchieved({fromBlock: 'latest'});
+        
+        events.watch(function(error, result) {
+          if (startWatch == true) {
+            console.log("CheckPoint!");
+            console.log(result.args.userid);
+            console.log(result.args.username);
+            console.log(result.args.step.toString());
+            DOM_pushCheckpointDone(result.args.username, result.args.step.toString());
+            // when the transaction mining occurs it's not necessary to broadcast the info to the EthereumDApp
+            // because they should already be notified through the ethereum protocol
+            //socket.emit('checkpoint_mined', {username: result.args.username, step: result.args.step.toString()});
+          }
+        startWatch = true;
+        });
       });
     });
   });
@@ -145,18 +123,13 @@ function debugBlockchain() {
 }
 
 // Send transaction to blockchain
-
 function sendToBlockchain(id, username, step) {
-  var account_testrpc = "0x5dfe7f17215fd524dd7555e0dd0c08c410c9395c";
-  var account_production = "0xCEB7500763395c02852269936E60f296a2280fBc";
-  var account_devthomas = "0x87b3f6def4d451c41be733b8924da66dea0caed4";
-  var account_bletchley = "1fc1a8aa07ae34d68d7e0f2f7d912406503a2013";
 
   DOM_pushCheckpoint(username, step);
   // in order to notify any EthereumDApp that a new checkpoint is beginning
   // using a socket with EthereumDApi that will browser to all of the connected EthereumDApp applications
   socket.emit('checkpoint_begin', {username: username, step: step});
-  contract.check(id, username, step, {from: account_production, gas: 200000}).then(function(tx) {
+  contract.check(id, username, step, {from: account_one, gas: 200000}).then(function(tx) {
     console.log("Transaction successful! " + tx);
   }).catch(function(e) {
     // Transaction failed

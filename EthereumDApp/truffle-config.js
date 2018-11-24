@@ -4,6 +4,7 @@ module.exports = {
   build: new DefaultBuilder({
     "index.html": "index.html",
     "app.css": "app.css",
+    "env.json": "env.json",
     "app.js": "app.js",
     "img/": "img/",
     "js/": "js/",
