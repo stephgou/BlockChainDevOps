@@ -1,9 +1,7 @@
 'use strict';
 
-console.log('Hello world');
-
 var Web3 = require("web3");
-var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 web3.eth.getBalance(web3.eth.accounts[0]);
 web3.fromWei(web3.eth.getBalance(web3.eth.accounts[0]), 'ether');
 var acct1 = web3.eth.accounts[0];

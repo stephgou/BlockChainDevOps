@@ -1,0 +1,1 @@
+copy ".\tools\include_contracts.js" ".\node_modules\truffle-default-builder\processors\post"

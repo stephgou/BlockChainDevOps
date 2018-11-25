@@ -1,11 +1,9 @@
-//Syntaxe 2- Contract is deployed contract
-
 'use strict';
 
-console.log('Syntax 2 - Contract is deployed contract');
+console.log('Test deployed contract without address and without truffle test');
 
 var Web3 = require("web3");
-var provider = new Web3.providers.HttpProvider("http://localhost:7545");
+var provider = new Web3.providers.HttpProvider("http://localhost:8545");
 var web3 = new Web3(provider);
 var balance = web3.eth.getBalance(web3.eth.accounts[0]);
 

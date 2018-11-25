@@ -1,0 +1,10 @@
+{
+  "name": "test_contract",
+  "version": "0.0.0",
+  "description": "Test Contract",
+  "main": "test_contract.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {}
+}
