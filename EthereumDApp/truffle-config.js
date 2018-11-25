@@ -39,11 +39,11 @@ module.exports = {
       network_id: 8041971,        // Consortium ethereum template
       host: "bdfrlejdd.northeurope.cloudapp.azure.com:8545"
     }
-  }
-  // },
-  //   mocha: {  
-  //   reporter: "mocha-junit-reporter",  
-  //   reporterOptions: {  
-  //     mochaFile: "truffle-mocha-test-results.xml"  
-  //   }  
+  },
+  mocha: {  
+    reporter: "mocha-junit-reporter",  
+    reporterOptions: {  
+      mochaFile: "truffle-mocha-test-results.xml"  
+    }
+  }  
 };
