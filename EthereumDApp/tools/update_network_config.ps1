@@ -7,8 +7,8 @@ Param(
 #region init
 Set-PSDebug -Strict
 
-$sourceFile = "..\app\Network.Cloud.config"
-$destinationFile = "..\app\Network.Local.config"
+$sourceFile = "..\app\config\Network.Cloud.config"
+$destinationFile = "..\app\config\Network.Local.config"
 
 # Read file
 $content = Get-Content -Path $Sourcefile

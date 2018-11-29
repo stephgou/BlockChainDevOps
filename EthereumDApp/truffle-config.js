@@ -4,7 +4,7 @@ module.exports = {
   build: new DefaultBuilder({
     "index.html": "index.html",
     "app.css": "app.css",
-    "*.config": "*.config",
+    "config/": "config/",
     "app.js": "app.js",
     "img/": "img/",
     "js/": "js/",
