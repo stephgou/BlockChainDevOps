@@ -37,7 +37,7 @@ module.exports = {
     },
     consortium: {
       network_id: 8041971,        // Consortium ethereum template
-      host: "bdfrlejdd.northeurope.cloudapp.azure.com:8545"
+      host: "consortium.northeurope.cloudapp.azure.com:8545"
     }
   },
   mocha: {  
