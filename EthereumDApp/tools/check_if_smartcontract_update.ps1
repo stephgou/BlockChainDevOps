@@ -1,8 +1,6 @@
 #region init
 Set-PSDebug -Strict
 
-cls
-
 $scriptFolder = Split-Path -Parent $MyInvocation.MyCommand.Definition
 Write-Host "scriptFolder" $scriptFolder
 

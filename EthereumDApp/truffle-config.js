@@ -20,12 +20,13 @@ module.exports = {
     }
   },
   networks: {
+    //Keep development for truffle network
     production: {
       network_id: 180666,        // Custom ethereum template
       host: "hackminingnode0.northeurope.cloudapp.azure.com", // domain of ethereum client pointing to live network
       port: 8545
     },
-    development: {
+    ganachecli: {
       host: "localhost",
       port: 8545,
       network_id: "*"
@@ -41,9 +42,11 @@ module.exports = {
     }
   },
   mocha: {  
-    reporter: "mocha-junit-reporter",  
-    reporterOptions: {  
-      mochaFile: "truffle-mocha-test-results.xml"  
-    }
+    //reporter: "mocha-junit-reporter",  
+    reporter: "mocha-multi-reporters"  
+    // mochaFile will be xunit.xml -> TODO update truffle for multi-reporters options
+    // reporterOptions: {  
+    //   mochaFile: "truffle-mocha-test-results.xml"
+    // }
   }  
 };
