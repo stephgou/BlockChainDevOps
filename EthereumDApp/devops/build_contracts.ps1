@@ -17,9 +17,3 @@ npm install truffle-default-builder --save
 
 # Truffle build  
 truffle build
-
-# Remove old test results  
-Remove-Item .\xunit.xml -ea SilentlyContinue 
-
-# Run the tests on truffle development network  
-truffle test
