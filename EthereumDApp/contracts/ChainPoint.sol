@@ -25,11 +25,11 @@ contract ChainPoint {
     uint public usersnumber = 0;
   
 
-    event stephgou(string orderno);
+    // event stephgou(string orderno);
 
-    function triggerStephgou(string memory orderno) public {
-        emit stephgou(orderno);
-    }
+    // function triggerStephgou(string memory orderno) public {
+    //     emit stephgou(orderno);
+    // }
 
     //ctor
     constructor() public {
