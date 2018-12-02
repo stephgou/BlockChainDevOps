@@ -70,7 +70,7 @@ qr.decodeFromCamera(video, resultHandler);
 
 $(document).ready(function() {
 
-  $.getJSON('config/Network.Cloud.config', function (config) {
+  $.getJSON('config/Network.Local.config', function (config) {
     var network = config.network;
     var host = network.host;
     var port = network.port;
