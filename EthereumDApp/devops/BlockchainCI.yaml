@@ -1,0 +1,83 @@
+resources:
+- repo: self
+  clean: true
+queue:
+  name: Default
+  demands: DotNetFramework
+
+variables:
+  applicationName: 'EthereumDApp'
+steps:
+- task: PowerShell@1
+  displayName: 'Check Contracts Update'
+  inputs:
+    scriptName: 'EthereumDApp/devops/check_if_smartcontracts_update.ps1'
+
+    failOnStandardError: false
+
+- task: PowerShell@1
+  displayName: 'SC - Build Contracts'
+  inputs:
+    scriptName: 'EthereumDApp/devops/build_contracts.ps1'
+
+    failOnStandardError: false
+
+  condition: and(succeeded(), in(variables['triggerByBuild'], 'SmartContract'))
+
+- task: PowerShell@1
+  displayName: 'SC - Test Contracts'
+  inputs:
+    scriptName: 'EthereumDApp/devops/test_contracts.ps1'
+
+    failOnStandardError: false
+
+  condition: and(succeeded(), in(variables['triggerByBuild'], 'SmartContract'))
+
+- task: PublishTestResults@2
+  displayName: 'SC - Publish Truffle Test Results'
+  inputs:
+    testResultsFiles: '**\xunit.xml'
+
+    testRunTitle: 'Test Smart Contract'
+
+  condition: and(succeeded(), in(variables['triggerByBuild'], 'SmartContract'))
+
+- task: CopyFiles@2
+  displayName: 'SC - Copy Build files for archive'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)\$(applicationName)\build'
+
+    TargetFolder: '$(build.artifactstagingdirectory)\build'
+
+  condition: and(succeeded(), in(variables['triggerByBuild'], 'SmartContract'))
+
+- task: ArchiveFiles@1
+  displayName: 'SC - Archive build files'
+  inputs:
+    rootFolder: '$(build.artifactstagingdirectory)\build'
+
+    includeRootFolder: false
+
+  condition: and(succeeded(), in(variables['triggerByBuild'], 'SmartContract'))
+
+- task: PublishBuildArtifacts@1
+  displayName: 'SC - Publish build file'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)/$(Build.BuildId).zip'
+
+  condition: and(succeeded(), in(variables['triggerByBuild'], 'SmartContract'))
+
+- task: ArchiveFiles@1
+  displayName: 'Archive Application and tools for release packaging'
+  inputs:
+    rootFolder: '$(build.sourcesdirectory)\$(applicationName)'
+
+    includeRootFolder: false
+
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(applicationName).zip'
+
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Application and tools for release packaging'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)/$(applicationName).zip'
