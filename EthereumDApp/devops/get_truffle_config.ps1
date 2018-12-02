@@ -12,6 +12,7 @@ set-location $scriptFolder
 #$truffleConfig = Get-Content -Path $truffleConfigFile -Raw
 #$s = $truffleConfig.SubString($truffleConfig.IndexOf("networks"))
 #$s = "{" + $s
+
 #DoubleQuote words withing extract (Still have to complete)
 
 $truffleNetworkFile = "..\truffle-networks.json"
@@ -20,5 +21,5 @@ $networks = @( Get-Content $truffleNetworkFile | ConvertFrom-Json)
 
 $targetNetwork = "consortium_member_integ"
 
-echo $networks."networks".$targetNetwork.port
-echo $networks."networks".$targetNetwork.host
+Write-Output $networks."networks".$targetNetwork.port
+Write-Output $networks."networks".$targetNetwork.host
