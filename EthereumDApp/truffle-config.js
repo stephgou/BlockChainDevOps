@@ -28,7 +28,7 @@ module.exports = {
     },
     consortium_member_integ: {
       network_id: 180663,
-      host: "consortium_member_integ0.northeurope.cloudapp.azure.com",
+      host: "ossparis0.northeurope.cloudapp.azure.comm",
       port: 7545
     },
     consortium_global_integ: {
