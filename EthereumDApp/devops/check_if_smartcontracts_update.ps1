@@ -15,8 +15,10 @@ git log --name-status -n 1 > $lastGitCommitLog
 $contractUpdates = @( Get-Content $lastGitCommitLog | Where-Object { $_.Contains("contracts") } ).Count
 
 if ($contractUpdates -gt 0) {
+    Write-Host "Smart Contract" 
     Write-Host "##vso[task.setvariable variable=triggerByBuild;]SmartContract" 
 }
 else {
+    Write-Host "Application Code"    
     Write-Host "##vso[task.setvariable variable=triggerByBuild;]AppCode"
 }
