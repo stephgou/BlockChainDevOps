@@ -1,11 +1,17 @@
 [CmdletBinding()]
 Param(
-    [Parameter(Mandatory=$True)] [string] $HostName,    # HostName
-    [Parameter(Mandatory=$True)] [string] $PortNumber   # Port
+    [Parameter(Mandatory=$True)] [string] $network
 )
 
 #region init
 Set-PSDebug -Strict
+
+$truffleNetworkFile = "..\truffle-networks.json"
+
+$networks = @( Get-Content $truffleNetworkFile | ConvertFrom-Json)
+
+$HostName = $networks."networks".$network.port
+$PortNumber = $networks."networks".$network.host
 
 $sourceFile = "..\app\config\Network.Cloud.config"
 $destinationFile = "..\app\config\Network.Local.config"

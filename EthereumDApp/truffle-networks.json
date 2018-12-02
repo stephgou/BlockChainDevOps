@@ -1,0 +1,30 @@
+{
+  "networks": {
+    "developper": {
+      "network_id": "*",
+      "host": "localhost",
+      "port": 8545
+    },
+    "consortium_member_integ": {
+      "network_id": 180663,
+      "host": "consortium_member_integ.northeurope.cloudapp.azure.com",
+      "port": 7545
+    },
+    "consortium_global_integ": {
+      "network_id": 180664,
+      "host": "consortium_global_integ.northeurope.cloudapp.azure.com",
+      "port": 8545
+    },
+    "consortium_global_staging": {
+      "network_id": 180665,
+      "host": "consortium_global_staging.northeurope.cloudapp.azure.com",
+      "port": 8545
+    },
+    "consortium_global_production": {
+      "network_id": 180666,
+      "host": "consortium_global_prod.northeurope.cloudapp.azure.com",
+      "port": 8545
+    }
+  }
+}
+  
