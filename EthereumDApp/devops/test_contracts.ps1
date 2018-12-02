@@ -3,6 +3,16 @@ Param(
     [Parameter(Mandatory=$False)] [string] $network = ""
     )
 
+#region init
+Set-PSDebug -Strict
+
+$scriptFolder = Split-Path -Parent $MyInvocation.MyCommand.Definition
+Write-Host "scriptFolder" $scriptFolder
+
+set-location $scriptFolder
+set-location ".."
+#endregion init
+
 # Remove old test results  
 Remove-Item .\xunit.xml -ea SilentlyContinue 
 

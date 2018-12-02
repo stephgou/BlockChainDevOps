@@ -5,9 +5,8 @@ $scriptFolder = Split-Path -Parent $MyInvocation.MyCommand.Definition
 Write-Host "scriptFolder" $scriptFolder
 
 set-location $scriptFolder
-#endregion init
-
 set-location ".."
+#endregion init
 
 # Install default builder for truffle
 npm install truffle-default-builder --save
