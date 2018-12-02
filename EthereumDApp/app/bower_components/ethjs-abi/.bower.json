@@ -1,0 +1,14 @@
+{
+  "name": "ethjs-abi",
+  "homepage": "https://github.com/ethjs/ethjs-abi",
+  "_release": "e63f929661",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e63f92966179d9017b57c9eadef78384a6899a51"
+  },
+  "_source": "https://github.com/ethjs/ethjs-abi.git",
+  "_target": "*",
+  "_originalSource": "ethjs-abi",
+  "_direct": true
+}
