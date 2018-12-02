@@ -10,7 +10,7 @@ Write-Host $dropFolder
 $buildFiles = ( Get-ChildItem $dropFolder | Measure-Object ).Count
 Write-Host $buildFiles
 
-if ($buildFiles -gt 2) {
+if ($buildFiles -gt 1) {
     Write-Host "Smart Contract" 
     Write-Host "##vso[task.setvariable variable=triggerByBuild;]SmartContract" 
 }
