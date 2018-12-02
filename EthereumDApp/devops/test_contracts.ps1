@@ -1,6 +1,6 @@
 [CmdletBinding()]
 Param(  
-    [Parameter(Mandatory=$True)] [string] $network = ""
+    [Parameter(Mandatory=$False)] [string] $network = ""
     )
 
 # Remove old test results  

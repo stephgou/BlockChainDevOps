@@ -20,25 +20,30 @@ module.exports = {
     }
   },
   networks: {
-    //Keep development for truffle network
-    production: {
-      network_id: 180666,        // Custom ethereum template
-      host: "hackminingnode0.northeurope.cloudapp.azure.com", // domain of ethereum client pointing to live network
-      port: 8545
-    },
-    ganachecli: {
+    //Keep development name for truffle network
+    developper: {
+      network_id: "*",
       host: "localhost",
       port: 8545,
-      network_id: "*"
     },
-    ganache: {
-      host: "localhost",
-      port: 7545,
-      network_id: "777"
+    consortium_member_integ: {
+      network_id: 180663,
+      host: "consortium_member_integ.northeurope.cloudapp.azure.com",
+      port: 7545
     },
-    consortium: {
-      network_id: 8041971,        // Consortium ethereum template
-      host: "consortium.northeurope.cloudapp.azure.com:8545"
+    consortium_global_integ: {
+      network_id: 180664,        // Custom ethereum template
+      host: "consortium_global_integ.northeurope.cloudapp.azure.com", // domain of ethereum client pointing to live network
+      port: 8545
+    },
+    consortium_global_staging: {
+      network_id: 180665,        // Custom ethereum template
+      host: "consortium_global_staging.northeurope.cloudapp.azure.com", // domain of ethereum client pointing to live network
+      port: 8545
+    },
+    consortium_global_production: {
+      network_id: 180666,        // Consortium ethereum template
+      host: "consortium_global_prod.northeurope.cloudapp.azure.com:8545"
     }
   },
   mocha: {  
