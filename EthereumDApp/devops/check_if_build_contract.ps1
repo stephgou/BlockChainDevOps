@@ -6,8 +6,9 @@ Param(
 #region init
 Set-PSDebug -Strict
 
-
+Write-Host $dropFolder
 $buildFiles = @( Get-ChildItem $dropFolder | Measure-Object ).Count
+Write-Host $buildFiles
 
 if ($buildFiles -gt 1) {
     Write-Host "Smart Contract" 
