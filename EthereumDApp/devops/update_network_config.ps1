@@ -11,8 +11,8 @@ $truffleNetworkFile = "$directory\truffle-networks.json"
 
 $networks = @( Get-Content $truffleNetworkFile | ConvertFrom-Json)
 
-$HostName = $networks."networks".$network.port
-$PortNumber = $networks."networks".$network.host
+$HostName = $networks."networks".$network.host
+$PortNumber = $networks."networks".$network.port
 
 $sourceFile = "$directory\app\config\Network.Cloud.config"
 $destinationFile = "$directory\build\config\Network.Local.json"
