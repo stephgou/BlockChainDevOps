@@ -33,12 +33,12 @@ module.exports = {
     },
     consortium_member_integ: {
       network_id: 180666,
-      host: "ossparis0.northeurope.cloudapp.azure.com",
+      host: "ossparism0.northeurope.cloudapp.azure.com",
       port: 8545
     },
     consortium_global_integ: {
       network_id: 180667,        // Custom ethereum template
-      host: "consortium_global_integ0.northeurope.cloudapp.azure.com", // domain of ethereum client pointing to live network
+      host: "ossparisg0.northeurope.cloudapp.azure.com", // domain of ethereum client pointing to live network
       port: 8545
     },
     consortium_global_staging: {

@@ -5,11 +5,11 @@
     #Paramètres du Azure Ressource Group
     $resourceGroupName = "SG-RG-OSSPARIS-DEMO",
     $resourceLocation = "North Europe",
-	$resourceGroupDeploymentName = "OSSPARISM-Demo-Deployed",
-    $templateFile = "consortium_member_integ.json",
-    $templateParameterFile = "consortium_member_integ.parameters.json",
+	$resourceGroupDeploymentName = "OSSPARISG-Demo-Deployed",
+    $templateFile = "consortium_global_integ.json",
+    $templateParameterFile = "consortium_global_integ.parameters.json",
     $templateFolder = "OssParisTemplates",
-    $tagName = "OssParis",
+    $tagName = "OssParisG",
     $tagValue = "Ethereum"
     )
 

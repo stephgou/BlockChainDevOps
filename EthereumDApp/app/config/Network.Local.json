@@ -1,1 +1,1 @@
-{ "network": {     "host": "localhost",     "port": "8545"     } }
+{ "network": {     "host": "ossparisg0.northeurope.cloudapp.azure.com",     "port": "8545"     } }

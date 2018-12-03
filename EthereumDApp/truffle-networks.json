@@ -12,12 +12,12 @@
     },
     "consortium_member_integ": {
       "network_id": 180666,
-      "host": "ossparis0.northeurope.cloudapp.azure.com",
+      "host": "ossparism0.northeurope.cloudapp.azure.com",
       "port": 8545
     },
     "consortium_global_integ": {
       "network_id": 180667,
-      "host": "consortium_global_integ0.northeurope.cloudapp.azure.com",
+      "host": "ossparisg0.northeurope.cloudapp.azure.com",
       "port": 8545
     },
     "consortium_global_staging": {
