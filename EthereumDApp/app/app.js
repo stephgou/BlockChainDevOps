@@ -75,13 +75,13 @@ $(document).ready(function() {
     var host = network.host;
     var port = network.port;
     blockchain_provider = "http://" + host + ":" + port;
-    //console.log(blockchain_provider);
+    console.log(blockchain_provider);
     // Set the provider you want from Web3.providers
     provider = new Web3.providers.HttpProvider(blockchain_provider);
-    //console.log(provider);
+    console.log(provider);
     web3 = new Web3(provider);
     account_one = web3.eth.accounts[0];
-    //console.log(account_one);
+    console.log(account_one);
 
     $.getJSON('contracts/ChainPoint.json', function (data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract
