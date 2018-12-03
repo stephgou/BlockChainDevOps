@@ -15,7 +15,7 @@ $HostName = $networks."networks".$network.port
 $PortNumber = $networks."networks".$network.host
 
 $sourceFile = "$directory\app\config\Network.Cloud.config"
-$destinationFile = "$directory\app\config\Network.Local.json"
+$destinationFile = "$directory\build\config\Network.Local.json"
 
 # Read file
 $content = Get-Content -Path $Sourcefile
