@@ -12,7 +12,7 @@ set-location ".."
 npm install truffle-default-builder --save
 
 # Fix issue in default builder for truffle
-./tools/fix_include_contracts.ps1
+./devops/fix_include_contracts.ps1
 
 # Truffle build  
 truffle build
