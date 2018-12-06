@@ -22,5 +22,5 @@ if ($network) {
 }
 else {
     # Run the tests on truffle development network  
-    truffle test --network $network --reset
+    truffle test
 }

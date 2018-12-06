@@ -11,14 +11,15 @@ steps:
 - task: PowerShell@1
   displayName: 'Check Contracts Update'
   inputs:
-    scriptName: 'EthereumDApp/devops/check_if_smartcontracts_update.ps1'
+    scriptName: 'EthereumDApp/devops/check_if_contract_update.ps1'
 
     failOnStandardError: false
+
 
 - task: PowerShell@1
   displayName: 'SC - Build Contracts'
   inputs:
-    scriptName: 'EthereumDApp/devops/build_contracts.ps1'
+    scriptName: 'EthereumDApp/devops/build_contract.ps1'
 
     failOnStandardError: false
 
@@ -27,7 +28,7 @@ steps:
 - task: PowerShell@1
   displayName: 'SC - Test Contracts'
   inputs:
-    scriptName: 'EthereumDApp/devops/test_contracts.ps1'
+    scriptName: 'EthereumDApp/devops/test_contract.ps1'
 
     failOnStandardError: false
 
