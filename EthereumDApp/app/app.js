@@ -76,6 +76,7 @@ $(document).ready(function() {
     var port = network.port;
 
     // Beware the web site has to be exposed on http or https
+    // depending on the same choice for blockchain 
     blockchain_provider = "http://" + host + ":" + port;
     console.log(blockchain_provider);
     // Set the provider you want from Web3.providers
