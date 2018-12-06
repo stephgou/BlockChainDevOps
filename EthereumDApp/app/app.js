@@ -75,6 +75,7 @@ $(document).ready(function() {
     var host = network.host;
     var port = network.port;
 
+    // OssParis
     // Beware the web site has to be exposed on http or https
     // depending on the same choice for blockchain 
     blockchain_provider = "http://" + host + ":" + port;
